@@ -1,4 +1,4 @@
-package logrusconfig
+package logrus_config
 
 import (
 	"fmt"
