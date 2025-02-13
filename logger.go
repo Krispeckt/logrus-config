@@ -3,7 +3,9 @@ package logx
 import (
 	"fmt"
 	"github.com/sirupsen/logrus"
+	"os"
 	"sort"
+	"strings"
 )
 
 type CustomFormatter struct{}
@@ -19,8 +21,14 @@ func (f *CustomFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 		level = "\033[33mWARNING\033[0m"
 	case logrus.ErrorLevel:
 		level = "\033[31mERROR\033[0m"
+	case logrus.FatalLevel:
+		level = "\033[31mFATAL\033[0m"
+	case logrus.PanicLevel:
+		level = "\033[31mPANIC\033[0m"
+	case logrus.DebugLevel:
+		level = "\033[36mDEBUG\033[0m"
 	default:
-		level = entry.Level.String()
+		level = strings.ToUpper(entry.Level.String())
 	}
 
 	var fields []string
@@ -38,12 +46,12 @@ func (f *CustomFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 	return []byte(logMessage), nil
 }
 
-func New(debug bool) *logrus.Logger {
+func New() *logrus.Logger {
 	logger := logrus.New()
 
 	logger.SetFormatter(&CustomFormatter{})
 	logger.SetReportCaller(true)
-	if debug {
+	if os.Getenv("DEBUG") == "true" {
 		logger.SetLevel(logrus.DebugLevel)
 	}
 
