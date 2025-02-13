@@ -3,7 +3,6 @@ package logx
 import (
 	"fmt"
 	"github.com/sirupsen/logrus"
-	"os"
 	"sort"
 	"strings"
 )
@@ -51,9 +50,7 @@ func New() *logrus.Logger {
 
 	logger.SetFormatter(&CustomFormatter{})
 	logger.SetReportCaller(true)
-	if os.Getenv("DEBUG") == "true" {
-		logger.SetLevel(logrus.DebugLevel)
-	}
+	logger.SetLevel(logrus.DebugLevel)
 
 	return logger
 }
